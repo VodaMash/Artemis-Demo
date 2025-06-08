@@ -3,7 +3,6 @@ package com.mash.kratos.config;
 import com.mash.kratos.exception.JmsErrorHandler;
 import jakarta.jms.ConnectionFactory;
 import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.annotation.EnableJms;
@@ -17,20 +16,16 @@ import org.springframework.jms.support.converter.MessageType;
 @Configuration
 @EnableJms
 public class JmsConfig {
-
-  @Value("${spring.artemis.broker-url}")
-  private String brokerUrl;
-
-  @Value("${spring.artemis.user}")
-  private String userName;
-
-  @Value("${spring.artemis.password}")
-  private String password;
-
   public static final String VOUCHER_QUEUE = "voucherQueue";
+
+  private final ArtemisProperties artemisProperties;
   private final JmsErrorHandler jmsErrorHandler;
 
-  public JmsConfig(JmsErrorHandler jmsErrorHandler) {
+  public JmsConfig(
+    ArtemisProperties artemisProperties,
+    JmsErrorHandler jmsErrorHandler
+  ) {
+    this.artemisProperties = artemisProperties;
     this.jmsErrorHandler = jmsErrorHandler;
   }
 
@@ -41,9 +36,9 @@ public class JmsConfig {
   public ConnectionFactory connectionFactory() {
     ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory();
     try {
-      connectionFactory.setBrokerURL(brokerUrl);
-      connectionFactory.setUser(userName);
-      connectionFactory.setPassword(password);
+      connectionFactory.setBrokerURL(artemisProperties.getBrokerUrl());
+      connectionFactory.setUser(artemisProperties.getUser());
+      connectionFactory.setPassword(artemisProperties.getPassword());
     } catch (Exception e) {
       throw new RuntimeException("Failed to configure Artemis connection factory", e);
     }
@@ -88,3 +83,4 @@ public class JmsConfig {
     return converter;
   }
 }
+
