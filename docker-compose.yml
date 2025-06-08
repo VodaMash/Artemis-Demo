@@ -1,0 +1,21 @@
+services:
+  artemis:
+    image: apache/activemq-artemis:2.33.0
+    container_name: kratos-broker
+    ports:
+      - "8161:8161" # Web console
+      - "61616:61616" # JMS port
+    environment:
+      ARTEMIS_USER: admin
+      ARTEMIS_PASSWORD: admin
+    volumes:
+      - artemis-data:/var/lib/artemis-instance
+    networks:
+      - artemis-network
+
+volumes:
+  artemis-data:
+
+networks:
+  artemis-network:
+    driver: bridge
