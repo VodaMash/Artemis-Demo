@@ -1,5 +1,7 @@
 # Kratos - Voucher Management System
 
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/VodaMash/Artemis-Demo)
+
 A Spring Boot application that provides asynchronous voucher management capabilities using Apache ActiveMQ Artemis
 message broker and H2 database.
 
